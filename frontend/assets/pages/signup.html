@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sign Up · Epic Cinema</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="auth-page">
+  <main class="auth-card">
+    <h1>Create an account</h1>
+    <p>Join Epic Cinema to get smart recommendations</p>
+
+    <form id="signup-form">
+      <label for="signup-username">Username</label>
+      <input id="signup-username" name="username" required autocomplete="username" />
+
+      <label for="signup-firstname">First name</label>
+      <input id="signup-firstname" name="firstname" required />
+
+      <label for="signup-lastname">Last name</label>
+      <input id="signup-lastname" name="lastname" required />
+
+      <label for="signup-password">Password</label>
+      <input id="signup-password" name="password" type="password" required autocomplete="new-password" />
+
+      <button type="submit" class="btn">Sign up</button>
+    </form>
+
+    <p class="muted">Already have an account? <a href="login.html">Log in</a></p>
+    <p class="muted"><a href="../../index.html">Back to Epic Cinema</a></p>
+  </main>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize signup handler defined in auth.js
+      initSignupForm();
+    });
+  </script>
+</body>
+</html>
