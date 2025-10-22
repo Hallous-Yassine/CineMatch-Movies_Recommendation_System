@@ -45,7 +45,7 @@ npm run dev
 - Real-time suggestions  
 - Responsive and modern UI  
 
-### 🧠 Recommendation Algorithms
+## 🧠 Recommendation Algorithms
 
 - **Content-Based Filtering** – Recommends movies similar to those the user liked, based on metadata such as genres, cast, or keywords.  
 - **Item-Based Collaborative Filtering** – Suggests movies that are similar to items rated highly by the user.  
