@@ -47,9 +47,11 @@ npm run dev
 
 ### 🧠 Recommendation Algorithms
 
-- **Content-Based Filtering** – Recommends similar movies using metadata (genre, cast, etc.)  
-- **Collaborative Filtering** – Suggests movies based on similar users’ preferences  
-- **Hybrid Model** – Combines both for more accurate results  
+- **Content-Based Filtering** – Recommends movies similar to those the user liked, based on metadata such as genres, cast, or keywords.  
+- **Item-Based Collaborative Filtering** – Suggests movies that are similar to items rated highly by the user.  
+- **User-Based Collaborative Filtering** – Finds users with similar tastes and recommends movies they enjoyed.  
+- **Popularity-Based Ranking** – Highlights trending or most-rated movies among all users.  
+- **Hybrid Recommendation** – Combines multiple methods to improve accuracy and personalization.  
 
 ## 🏗️ Project Architecture
 
