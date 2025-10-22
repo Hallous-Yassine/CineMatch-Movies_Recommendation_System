@@ -1,22 +1,24 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Epic Cinema – Smart Movie Discovery</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="icon" type="image/png" href="assets/img/logo.png" />
-  <script>
-    // Immediately redirect to login page
-    window.location.replace("assets/pages/login.html");
-  </script>
-</head>
-<body>
-  <!-- Fallback for users with JS disabled -->
-  <noscript>
-    <p>JavaScript is required to use Epic Cinema. 
-      <a href="assets/pages/login.html">Go to Login</a>
-    </p>
-  </noscript>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CineMatch - Your Personal Movie Recommendation Engine</title>
+    <meta name="description" content="Discover your next favorite film with CineMatch. Get personalized movie recommendations powered by advanced algorithms tailored to your unique taste." />
+    <meta name="author" content="CineMatch" />
+
+    <meta property="og:title" content="CineMatch - Personalized Movie Recommendations" />
+    <meta property="og:description" content="Find movies you'll love with intelligent recommendations based on your viewing preferences and ratings." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@lovable_dev" />
+    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

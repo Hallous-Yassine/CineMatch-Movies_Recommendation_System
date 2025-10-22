@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Cinematic dark theme - deep navy base */
+    --background: 220 40% 6%;
+    --foreground: 210 20% 95%;
+
+    --card: 220 35% 10%;
+    --card-foreground: 210 20% 95%;
+
+    --popover: 220 40% 8%;
+    --popover-foreground: 210 20% 95%;
+
+    /* Gold accent for ratings and highlights */
+    --primary: 45 90% 55%;
+    --primary-foreground: 220 40% 10%;
+
+    --secondary: 220 30% 15%;
+    --secondary-foreground: 210 20% 95%;
+
+    --muted: 220 25% 20%;
+    --muted-foreground: 210 10% 65%;
+
+    --accent: 280 60% 50%;
+    --accent-foreground: 210 20% 98%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 210 20% 98%;
+
+    --border: 220 30% 18%;
+    --input: 220 30% 18%;
+    --ring: 45 90% 55%;
+
+    --radius: 0.75rem;
+
+    /* Custom cinematic tokens */
+    --gold: 45 90% 55%;
+    --gold-glow: 45 100% 60%;
+    --cinema-dark: 220 40% 8%;
+    --cinema-darker: 220 50% 4%;
+    
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(220 40% 6%), hsl(280 30% 10%));
+    --gradient-card: linear-gradient(180deg, hsl(220 35% 10%), hsl(220 35% 8%));
+    --gradient-gold: linear-gradient(135deg, hsl(45 90% 55%), hsl(35 95% 60%));
+    
+    /* Shadows */
+    --shadow-card: 0 8px 32px hsla(220, 50%, 4%, 0.5);
+    --shadow-glow: 0 0 24px hsla(45, 90%, 55%, 0.3);
+    --shadow-elevated: 0 16px 48px hsla(220, 50%, 4%, 0.7);
+    
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    background: linear-gradient(180deg, hsl(var(--cinema-darker)) 0%, hsl(var(--background)) 100%);
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--cinema-dark));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted));
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--gold));
+  }
+}
