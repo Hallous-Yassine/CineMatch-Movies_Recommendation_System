@@ -17,7 +17,7 @@ def get_content_recommendations(movie_id):
     try:
         db = current_app.db_manager
         recommender = current_app.recommender
-        n = request.args.get('n', 10, type=int)
+        n = request.args.get('n', 9, type=int)
         
         # Validate n
         if n <= 0 or n > 100:
@@ -61,7 +61,7 @@ def get_item_recommendations(movie_id):
     try:
         db = current_app.db_manager
         recommender = current_app.recommender
-        n = request.args.get('n', 10, type=int)
+        n = request.args.get('n', 9, type=int)
         
         if n <= 0 or n > 100:
             return jsonify({
@@ -104,7 +104,7 @@ def get_collaborative_recommendations(user_id):
     try:
         db = current_app.db_manager
         recommender = current_app.recommender
-        n = request.args.get('n', 10, type=int)
+        n = request.args.get('n', 9, type=int)
         
         if n <= 0 or n > 100:
             return jsonify({
@@ -146,7 +146,7 @@ def get_popular_recommendations():
     """
     try:
         recommender = current_app.recommender
-        n = request.args.get('n', 10, type=int)
+        n = request.args.get('n', 9, type=int)
         
         if n <= 0 or n > 100:
             return jsonify({
@@ -181,7 +181,7 @@ def get_hybrid_recommendations(user_id):
     try:
         db = current_app.db_manager
         recommender = current_app.recommender
-        n = request.args.get('n', 10, type=int)
+        n = request.args.get('n', 9, type=int)
         movie_id = request.args.get('movie_id', None, type=int)
         
         if n <= 0 or n > 100:
@@ -240,7 +240,7 @@ def get_personalized_recommendations(user_id):
     try:
         db = current_app.db_manager
         recommender = current_app.recommender
-        n = request.args.get('n', 10, type=int)
+        n = request.args.get('n', 9, type=int)
         
         if n <= 0 or n > 100:
             return jsonify({
@@ -386,7 +386,7 @@ def get_similar_users(user_id):
     try:
         db = current_app.db_manager
         recommender = current_app.recommender
-        n = request.args.get('n', 10, type=int)
+        n = request.args.get('n', 9, type=int)
         
         # Verify user exists
         user = db.get_user_by_id(user_id)

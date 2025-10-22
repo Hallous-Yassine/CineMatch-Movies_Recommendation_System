@@ -18,42 +18,61 @@ users_bp = Blueprint('users', __name__)
 def create_user():
     data = request.get_json(force=True)
     if not data:
-        return jsonify({'success': False, 'error': 'No data provided'}), 400
+        return jsonify({'success': False, 'message': 'No data provided'}), 400
 
     username = data.get('username')
-    firstname = data.get('firstname', '')
-    lastname = data.get('lastname', '')
     password = data.get('password')
-
     if not username or not password:
-        return jsonify({'success': False, 'error': 'username and password required'}), 400
+        return jsonify({'success': False, 'message': 'username and password required'}), 400
 
     db = current_app.db_manager
-    ok = db.add_user(username, firstname, lastname, password)
-    if not ok:
-        return jsonify({'success': False, 'error': 'User creation failed (maybe username exists)'}), 400
+    
+    # Check if user already exists
+    existing_user = db.get_user_by_username(username)
+    if existing_user:
+        return jsonify({'success': False, 'message': 'Username already exists'}), 400
+    
+    # Create new user
+    user = db.add_user(username, password)
+    if not user:
+        return jsonify({'success': False, 'message': 'Failed to create user'}), 500
 
-    user = db.get_user_by_username(username)
-    return jsonify({'success': True, 'user': user}), 201
+    # Return consistent structure with data object
+    return jsonify({
+        'success': True,
+        'message': 'User created successfully',
+        'data': {
+            'userId': user['id'],
+            'username': user['username']
+        }
+    }), 201
 
 
 @users_bp.route('/users/authenticate', methods=['POST'])
 def authenticate_user():
     data = request.get_json(force=True)
     if not data:
-        return jsonify({'success': False, 'error': 'No data provided'}), 400
+        return jsonify({'success': False, 'message': 'No data provided'}), 400
 
     username = data.get('username')
     password = data.get('password')
     if not username or not password:
-        return jsonify({'success': False, 'error': 'username and password required'}), 400
+        return jsonify({'success': False, 'message': 'username and password required'}), 400
 
     db = current_app.db_manager
     user = db.authenticate_user(username, password)
     if not user:
-        return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
+        return jsonify({'success': False, 'message': 'Invalid credentials'}), 401
 
-    return jsonify({'success': True, 'user': user}), 200
+    # Return consistent structure with data object
+    return jsonify({
+        'success': True, 
+        'message': 'Authentication successful',
+        'data': {
+            'userId': user['id'],
+            'username': user['username']
+        }
+    }), 200
 
 
 @users_bp.route('/users/<int:user_id>', methods=['GET'])

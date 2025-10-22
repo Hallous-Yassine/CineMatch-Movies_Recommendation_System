@@ -258,11 +258,37 @@ class MovieRecommender:
             recs["avg_rating"] = recs["avg_rating"].round(2)
             recs["weighted_rating"] = recs["weighted_rating"].round(2)
 
-            return recs[["movieId", "title", "genres", "avg_rating", "rating_count", "weighted_rating"]].to_dict("records")
+            formatted = []
+            for _, row in recs.iterrows():
+                # Separate title and year (e.g., "Toy Story (1995)")
+                title = row["title"]
+                year = None
+                if "(" in title and ")" in title:
+                    try:
+                        year = title.split("(")[-1].replace(")", "").strip()
+                        title = title[: title.rfind("(")].strip()
+                    except Exception:
+                        pass
+
+                # Split genres into a list
+                genres = row["genres"].split("|") if isinstance(row["genres"], str) else []
+
+                formatted.append({
+                    "movieId": int(row["movieId"]),
+                    "title": title,
+                    "year": year,
+                    "genres": genres,
+                    "avg_rating": float(row["avg_rating"]),
+                    "rating_count": int(row["rating_count"]),
+                    "weighted_rating": float(row["weighted_rating"])
+                })
+
+            return formatted
 
         except Exception as e:
             print(f"❌ Error in popular recommendations: {e}")
             return []
+
 
     # =======================================================
     # =============== USER PROFILE ANALYSIS =================

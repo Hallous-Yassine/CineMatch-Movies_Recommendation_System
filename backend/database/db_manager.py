@@ -101,7 +101,7 @@ class DatabaseManager:
             all_genres.update(g.split("|"))
         return sorted(all_genres)
 
-    def get_popular_movies(self, n=10, min_ratings=10):
+    def get_popular_movies(self, n=6, min_ratings=10):
         """Retourne les films les mieux notés avec au moins `min_ratings` avis."""
         if self.movies_df is None or self.ratings_df is None:
             return []
@@ -176,9 +176,21 @@ class DatabaseManager:
         return user.iloc[0].to_dict() if not user.empty else None
 
     def authenticate_user(self, username, password):
-        """Vérifie les identifiants d’un utilisateur."""
+        """Vérifie les identifiants d'un utilisateur."""
         user = self.get_user_by_username(username)
-        return user if user and user["password"] == password else None
+        if not user:
+            return None
+        
+        # IMPORTANT: In production, use password hashing!
+        # For now, plain text comparison (NOT RECOMMENDED for production)
+        if user.get("password") == password:
+            # Return user without password
+            return {
+                'id': user['id'],
+                'username': user['username']
+                # Don't return password to frontend
+            }
+        return None
 
     def add_user(self, username, firstname, lastname, password):
         """Crée un nouvel utilisateur."""
