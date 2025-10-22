@@ -6,8 +6,12 @@ The project combines a **Python backend** with a **TypeScript + React frontend**
 
 ## 🚀 Demo
 
+
+## 🚀 Demo
+
 🎥 **Watch Demo Video:**  
-[Click here to view the demo](https://github.com/Hallous-Yassine/CineMatch-Movies_Recommendation_System/blob/main/Enregistrement%20de%20l'écran%202025-10-22%20222048.mp4)
+[![Watch the demo](https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg)](https://github.com/Hallous-Yassine/CineMatch-Movies_Recommendation_System/raw/main/Enregistrement%20de%20l'écran%202025-10-22%20222048.mp4)
+
 
 ## ⚙️ Installation
 
