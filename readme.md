@@ -130,9 +130,19 @@ frontend/src/
 
 ## 🧰 Tech Stack / Built With
 
-- **TypeScript** – 65.6%  
-- **Python** – 32.4%  
-- **CSS** – 1.3%
+### 🖥️ Backend
+- **Python** – Core programming language  
+- **Flask** – RESTful API framework  
+- **Pandas** – Data manipulation and analysis  
+- **Scikit-learn** – Machine learning and recommendation algorithms  
+- **SQLite** – Lightweight local database  
+
+### 💻 Frontend
+- **TypeScript** – Strongly typed JavaScript for scalability  
+- **React (Vite)** – Fast, modular frontend framework  
+- **Tailwind CSS** – Utility-first CSS framework for styling  
+- **ShadCN/UI** – Reusable UI component library  
+- **Axios** – HTTP client for API communication
 
 ## 📝 Remark
 
