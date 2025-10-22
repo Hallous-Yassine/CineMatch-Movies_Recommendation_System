@@ -7,6 +7,8 @@ The project combines a **Python backend** with a **TypeScript + React frontend**
 ## 🚀 Demo
 
 🎥 **Watch Demo Video:**  
+
+
 [![Watch the demo](https://img.youtube.com/vi/JA2f-gHS7jg/hqdefault.jpg)](https://www.youtube.com/watch?v=JA2f-gHS7jg)
 
 
