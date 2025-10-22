@@ -1,195 +1,142 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
-import { createUser, authenticateUser } from "@/lib/api";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Film } from "lucide-react";
 import { toast } from "sonner";
+import { Sparkles } from "lucide-react";
 
-interface AuthProps {
-  onLogin: (user: { id: number; username: string }) => void;
-}
-
-const Auth = ({ onLogin }: AuthProps) => {
+const Auth = () => {
   const navigate = useNavigate();
-  const [loginData, setLoginData] = useState({ username: "", password: "" });
-  const [signupData, setSignupData] = useState({
-    username: "",
-    password: "",
-    firstname: "",
-    lastname: "",
-  });
+  const [isLoading, setIsLoading] = useState(false);
 
-  const loginMutation = useMutation({
-    mutationFn: () => authenticateUser(loginData.username, loginData.password),
-    onSuccess: (data) => {
-      if (data.success && data.data) {
-        onLogin(data.data);
-        toast.success("Welcome back!");
-        navigate("/");
-      } else {
-        toast.error(data.error || "Invalid credentials");
-      }
-    },
-    onError: () => {
-      toast.error("Login failed. Please try again.");
-    },
-  });
-
-  const signupMutation = useMutation({
-    mutationFn: () =>
-      createUser(
-        signupData.username,
-        signupData.password,
-        signupData.firstname,
-        signupData.lastname
-      ),
-    onSuccess: (data) => {
-      if (data.success && data.data) {
-        onLogin(data.data);
-        toast.success("Account created successfully!");
-        navigate("/");
-      } else {
-        toast.error(data.error || "Signup failed");
-      }
-    },
-    onError: () => {
-      toast.error("Signup failed. Please try again.");
-    },
-  });
-
-  const handleLogin = (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!loginData.username || !loginData.password) {
-      toast.error("Please fill in all fields");
-      return;
-    }
-    loginMutation.mutate();
+    setIsLoading(true);
+    
+    // Simulate authentication
+    setTimeout(() => {
+      toast.success("Welcome back!");
+      navigate("/home");
+      setIsLoading(false);
+    }, 1000);
   };
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!signupData.username || !signupData.password) {
-      toast.error("Username and password are required");
-      return;
-    }
-    signupMutation.mutate();
+    setIsLoading(true);
+    
+    // Simulate registration
+    setTimeout(() => {
+      toast.success("Account created successfully!");
+      navigate("/home");
+      setIsLoading(false);
+    }, 1000);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
-      <Card className="w-full max-w-md p-8 space-y-6 bg-gradient-card">
-        {/* Logo */}
-        <div className="text-center space-y-2">
-          <div className="flex justify-center">
-            <Film className="w-12 h-12 text-primary" />
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background gradient effects */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-accent/20" />
+      <div className="absolute top-20 left-10 w-72 h-72 bg-primary/30 rounded-full blur-[128px]" />
+      <div className="absolute bottom-20 right-10 w-72 h-72 bg-accent/30 rounded-full blur-[128px]" />
+      
+      <Card className="w-full max-w-md relative backdrop-blur-sm bg-card/80 border-border/50">
+        <CardHeader className="text-center space-y-2">
+          <div className="mx-auto w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center mb-2">
+            <Sparkles className="w-6 h-6 text-primary-foreground" />
           </div>
-          <h1 className="text-2xl font-bold">Welcome to CineMatch</h1>
-          <p className="text-muted-foreground">Sign in to get personalized recommendations</p>
-        </div>
-
-        <Tabs defaultValue="login" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="login">Login</TabsTrigger>
-            <TabsTrigger value="signup">Sign Up</TabsTrigger>
-          </TabsList>
-
-          {/* Login Tab */}
-          <TabsContent value="login">
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="login-username">Username</Label>
-                <Input
-                  id="login-username"
-                  type="text"
-                  value={loginData.username}
-                  onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
-                  placeholder="Enter your username"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="login-password">Password</Label>
-                <Input
-                  id="login-password"
-                  type="password"
-                  value={loginData.password}
-                  onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                  placeholder="Enter your password"
-                />
-              </div>
-              <Button
-                type="submit"
-                variant="hero"
-                className="w-full"
-                disabled={loginMutation.isPending}
-              >
-                {loginMutation.isPending ? "Logging in..." : "Login"}
-              </Button>
-            </form>
-          </TabsContent>
-
-          {/* Signup Tab */}
-          <TabsContent value="signup">
-            <form onSubmit={handleSignup} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="signup-username">Username *</Label>
-                <Input
-                  id="signup-username"
-                  type="text"
-                  value={signupData.username}
-                  onChange={(e) => setSignupData({ ...signupData, username: e.target.value })}
-                  placeholder="Choose a username"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="signup-password">Password *</Label>
-                <Input
-                  id="signup-password"
-                  type="password"
-                  value={signupData.password}
-                  onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
-                  placeholder="Create a password"
-                  required
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
+          <CardTitle className="text-3xl font-bold">Welcome</CardTitle>
+          <CardDescription>
+            Sign in to access personalized recommendations
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="signin" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="signin">Sign In</TabsTrigger>
+              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="signin">
+              <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signup-firstname">First Name</Label>
+                  <Label htmlFor="signin-email">Email</Label>
                   <Input
-                    id="signup-firstname"
-                    type="text"
-                    value={signupData.firstname}
-                    onChange={(e) => setSignupData({ ...signupData, firstname: e.target.value })}
-                    placeholder="Optional"
+                    id="signin-email"
+                    type="email"
+                    placeholder="you@example.com"
+                    required
+                    className="bg-background/50"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-lastname">Last Name</Label>
+                  <Label htmlFor="signin-password">Password</Label>
                   <Input
-                    id="signup-lastname"
-                    type="text"
-                    value={signupData.lastname}
-                    onChange={(e) => setSignupData({ ...signupData, lastname: e.target.value })}
-                    placeholder="Optional"
+                    id="signin-password"
+                    type="password"
+                    placeholder="••••••••"
+                    required
+                    className="bg-background/50"
                   />
                 </div>
-              </div>
-              <Button
-                type="submit"
-                variant="hero"
-                className="w-full"
-                disabled={signupMutation.isPending}
-              >
-                {signupMutation.isPending ? "Creating account..." : "Sign Up"}
-              </Button>
-            </form>
-          </TabsContent>
-        </Tabs>
+                <Button 
+                  type="submit" 
+                  className="w-full" 
+                  variant="gold"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Signing in..." : "Sign In"}
+                </Button>
+              </form>
+            </TabsContent>
+            
+            <TabsContent value="signup">
+              <form onSubmit={handleSignUp} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="signup-name">Name</Label>
+                  <Input
+                    id="signup-name"
+                    type="text"
+                    placeholder="John Doe"
+                    required
+                    className="bg-background/50"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="signup-email">Email</Label>
+                  <Input
+                    id="signup-email"
+                    type="email"
+                    placeholder="you@example.com"
+                    required
+                    className="bg-background/50"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="signup-password">Password</Label>
+                  <Input
+                    id="signup-password"
+                    type="password"
+                    placeholder="••••••••"
+                    required
+                    className="bg-background/50"
+                  />
+                </div>
+                <Button 
+                  type="submit" 
+                  className="w-full" 
+                  variant="gold"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Creating account..." : "Create Account"}
+                </Button>
+              </form>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
       </Card>
     </div>
   );

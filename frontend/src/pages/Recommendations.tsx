@@ -1,112 +1,168 @@
-import { useQuery } from "@tanstack/react-query";
-import { getHybridRecommendations, getCollaborativeRecommendations, getContentBasedRecommendations, Movie } from "@/lib/api";
-import MovieCard from "@/components/MovieCard";
-import { Card } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Sparkles, Users, Film, TrendingUp } from "lucide-react";
-import { Navigate } from "react-router-dom";
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Star, Search, Filter, TrendingUp } from "lucide-react";
 
-interface RecommendationsProps {
-  userId: number | null;
-}
+// Mock data for recommendations
+const mockRecommendations = [
+  {
+    id: 1,
+    title: "The Quantum Paradox",
+    category: "Science Fiction",
+    rating: 4.8,
+    tags: ["AI", "Future", "Technology"],
+    description: "A mind-bending journey through quantum realities and artificial intelligence.",
+  },
+  {
+    id: 2,
+    title: "Midnight Symphony",
+    category: "Mystery",
+    rating: 4.5,
+    tags: ["Thriller", "Detective", "Suspense"],
+    description: "A detective's race against time to solve a series of mysterious disappearances.",
+  },
+  {
+    id: 3,
+    title: "Digital Dreams",
+    category: "Technology",
+    rating: 4.9,
+    tags: ["Innovation", "Startup", "AI"],
+    description: "The story of visionaries building the future of artificial intelligence.",
+  },
+  {
+    id: 4,
+    title: "Ocean's Whisper",
+    category: "Adventure",
+    rating: 4.6,
+    tags: ["Nature", "Exploration", "Discovery"],
+    description: "An underwater expedition revealing secrets of the deep ocean.",
+  },
+  {
+    id: 5,
+    title: "Code Warriors",
+    category: "Programming",
+    rating: 4.7,
+    tags: ["Education", "Coding", "Career"],
+    description: "Master the art of software development with practical examples.",
+  },
+  {
+    id: 6,
+    title: "Stellar Horizons",
+    category: "Space",
+    rating: 4.9,
+    tags: ["Science", "Space", "Astronomy"],
+    description: "Explore the wonders of the universe and distant galaxies.",
+  },
+];
 
-const Recommendations = ({ userId }: RecommendationsProps) => {
-  if (!userId) {
-    return <Navigate to="/auth" />;
-  }
+const Recommendations = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
-  const { data: hybridRecs, isLoading: loadingHybrid } = useQuery({
-    queryKey: ["hybrid-recommendations", userId],
-    queryFn: () => getHybridRecommendations(userId, 24),
-  });
+  const categories = ["all", ...Array.from(new Set(mockRecommendations.map(r => r.category)))];
 
-  const { data: collaborativeRecs, isLoading: loadingCollab } = useQuery({
-    queryKey: ["collaborative-recommendations", userId],
-    queryFn: () => getCollaborativeRecommendations(userId, 24),
+  const filteredRecommendations = mockRecommendations.filter(item => {
+    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         item.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === "all" || item.category === selectedCategory;
+    return matchesSearch && matchesCategory;
   });
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
-      <div className="space-y-2">
-        <h1 className="text-4xl font-bold flex items-center gap-2">
-          <Sparkles className="w-8 h-8 text-primary" />
-          Your Recommendations
-        </h1>
-        <p className="text-muted-foreground">
-          Personalized movie suggestions based on your taste and viewing history
-        </p>
+    <div className="min-h-screen p-6 md:p-8">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Header */}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-primary mb-2">
+            <TrendingUp className="w-6 h-6" />
+            <h1 className="text-4xl font-bold">Recommendations</h1>
+          </div>
+          <p className="text-muted-foreground text-lg">
+            Discover personalized content recommendations based on your preferences
+          </p>
+        </div>
+
+        {/* Filters */}
+        <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+          <CardContent className="pt-6">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <Input
+                  placeholder="Search recommendations..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 bg-background/50"
+                />
+              </div>
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger className="w-full md:w-[200px] bg-background/50">
+                  <Filter className="w-4 h-4 mr-2" />
+                  <SelectValue placeholder="Category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map(category => (
+                    <SelectItem key={category} value={category}>
+                      {category === "all" ? "All Categories" : category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Results count */}
+        <div className="text-sm text-muted-foreground">
+          Showing {filteredRecommendations.length} recommendation{filteredRecommendations.length !== 1 ? 's' : ''}
+        </div>
+
+        {/* Recommendations Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredRecommendations.map((item) => (
+            <Card key={item.id} className="card-glow bg-card/50 backdrop-blur-sm border-border/50 flex flex-col">
+              <CardHeader>
+                <div className="flex justify-between items-start mb-2">
+                  <Badge variant="secondary" className="text-xs">
+                    {item.category}
+                  </Badge>
+                  <div className="flex items-center gap-1 text-yellow-500">
+                    <Star className="w-4 h-4 fill-current" />
+                    <span className="text-sm font-semibold">{item.rating}</span>
+                  </div>
+                </div>
+                <CardTitle className="text-xl">{item.title}</CardTitle>
+                <CardDescription>{item.description}</CardDescription>
+              </CardHeader>
+              <CardContent className="flex-1 flex flex-col justify-end">
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {item.tags.map((tag, idx) => (
+                    <Badge key={idx} variant="outline" className="text-xs">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+                <Button className="w-full" variant="gold">
+                  View Details
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {filteredRecommendations.length === 0 && (
+          <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+            <CardContent className="py-12 text-center">
+              <p className="text-muted-foreground">
+                No recommendations found. Try adjusting your filters.
+              </p>
+            </CardContent>
+          </Card>
+        )}
       </div>
-
-      <Tabs defaultValue="hybrid" className="space-y-6">
-        <TabsList className="grid w-full max-w-md grid-cols-2">
-          <TabsTrigger value="hybrid" className="flex items-center gap-2">
-            <TrendingUp className="w-4 h-4" />
-            Hybrid AI
-          </TabsTrigger>
-          <TabsTrigger value="collaborative" className="flex items-center gap-2">
-            <Users className="w-4 h-4" />
-            Similar Users
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="hybrid" className="space-y-4">
-          <Card className="p-4 bg-gradient-card">
-            <p className="text-sm text-muted-foreground">
-              <strong>Hybrid recommendations</strong> combine multiple AI algorithms: content-based filtering (genre similarity), 
-              collaborative filtering (user preferences), and popularity metrics to give you the best suggestions.
-            </p>
-          </Card>
-
-          {loadingHybrid ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
-              {[...Array(24)].map((_, i) => (
-                <div key={i} className="aspect-[2/3] bg-muted animate-pulse rounded-lg" />
-              ))}
-            </div>
-          ) : hybridRecs?.data && hybridRecs.data.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
-              {hybridRecs.data.map((movie: Movie) => (
-                <MovieCard key={movie.movieId} movie={movie} />
-              ))}
-            </div>
-          ) : (
-            <Card className="p-8 text-center">
-              <p className="text-muted-foreground">
-                No recommendations yet. Rate some movies to get personalized suggestions!
-              </p>
-            </Card>
-          )}
-        </TabsContent>
-
-        <TabsContent value="collaborative" className="space-y-4">
-          <Card className="p-4 bg-gradient-card">
-            <p className="text-sm text-muted-foreground">
-              <strong>Collaborative filtering</strong> finds users with similar taste to yours and recommends movies 
-              they enjoyed that you haven't seen yet. The more you rate, the better it gets!
-            </p>
-          </Card>
-
-          {loadingCollab ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
-              {[...Array(24)].map((_, i) => (
-                <div key={i} className="aspect-[2/3] bg-muted animate-pulse rounded-lg" />
-              ))}
-            </div>
-          ) : collaborativeRecs?.data && collaborativeRecs.data.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
-              {collaborativeRecs.data.map((movie: Movie) => (
-                <MovieCard key={movie.movieId} movie={movie} />
-              ))}
-            </div>
-          ) : (
-            <Card className="p-8 text-center">
-              <p className="text-muted-foreground">
-                Not enough data yet. Rate more movies to find users with similar taste!
-              </p>
-            </Card>
-          )}
-        </TabsContent>
-      </Tabs>
     </div>
   );
 };

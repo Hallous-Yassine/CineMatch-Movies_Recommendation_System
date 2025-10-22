@@ -45,20 +45,29 @@ All colors MUST be HSL.
     --gold-glow: 45 100% 60%;
     --cinema-dark: 220 40% 8%;
     --cinema-darker: 220 50% 4%;
-    
+
     /* Gradients */
     --gradient-hero: linear-gradient(135deg, hsl(220 40% 6%), hsl(280 30% 10%));
     --gradient-card: linear-gradient(180deg, hsl(220 35% 10%), hsl(220 35% 8%));
     --gradient-gold: linear-gradient(135deg, hsl(45 90% 55%), hsl(35 95% 60%));
-    
+
     /* Shadows */
     --shadow-card: 0 8px 32px hsla(220, 50%, 4%, 0.5);
     --shadow-glow: 0 0 24px hsla(45, 90%, 55%, 0.3);
     --shadow-elevated: 0 16px 48px hsla(220, 50%, 4%, 0.7);
-    
+
     /* Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    
+    --sidebar-background: 220 40% 6%;
+    --sidebar-foreground: 210 20% 95%;
+    --sidebar-primary: 45 90% 55%;
+    --sidebar-primary-foreground: 220 40% 10%;
+    --sidebar-accent: 220 30% 15%;
+    --sidebar-accent-foreground: 210 20% 95%;
+    --sidebar-border: 220 30% 18%;
+    --sidebar-ring: 45 90% 55%;
   }
 }
 
@@ -70,6 +79,7 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground antialiased;
     background: linear-gradient(180deg, hsl(var(--cinema-darker)) 0%, hsl(var(--background)) 100%);
+    font-feature-settings: "liga" 1, "calt" 1;
   }
 
   /* Smooth scrolling */
@@ -93,5 +103,22 @@ All colors MUST be HSL.
 
   ::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--gold));
+  }
+
+  .gradient-text {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .card-glow {
+    box-shadow: var(--shadow-card);
+    transition: var(--transition-smooth);
+  }
+
+  .card-glow:hover {
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-2px);
   }
 }
